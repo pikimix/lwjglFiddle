@@ -1,0 +1,77 @@
+package org.cakemix.Graphics;
+
+import java.awt.image.BufferedImage;
+import org.cakemix.Loaders.TextureLoader;
+import org.cakemix.Timer;
+import org.lwjgl.opengl.GL11;
+
+/**
+ *
+ * @author cakemix
+ */
+public class Sprite{
+    
+    // Store the sprite sheet
+    //private BufferedImage texture;
+    protected int textureID;
+    
+    // render size (width, height)
+    protected int width, height;
+    
+    //sprites curent frame
+    protected int frameIndex;
+    
+    public Sprite(String location, int width, int height){
+        
+        BufferedImage texture = TextureLoader.loadImage(location);
+        textureID = TextureLoader.loadTexture(texture);
+        this.width = width;
+        this.height = height;
+    }
+    
+    
+    /*
+     * 
+     * Nothing really needed in here
+     */
+    public void update(Timer timer){
+        // use this for animation code 
+        // in sub class
+    }
+    
+    /*
+     * Render the Sprite
+     */
+    public void draw(float x, float y)
+    {
+        // Store the Curent model Matrix
+        GL11.glPushMatrix();
+        
+        // Bind to the texture
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+        
+        // Move to correct location
+        GL11.glTranslatef(x, y, 0);
+        GL11.glColor3f(1, 1, 1);
+        
+        // Draw textured Quad to match the sprite
+        GL11.glBegin(GL11.GL_QUADS);
+        {
+            GL11.glTexCoord2d(0, 0);
+            GL11.glVertex2i(0, 0);
+            
+            GL11.glTexCoord2d(0, 1f);
+	    GL11.glVertex2i(0, height);
+	    
+            GL11.glTexCoord2d(1f, 1f);
+	    GL11.glVertex2i(width,height);
+	    
+            GL11.glTexCoord2d(1f, 0);
+	    GL11.glVertex2i(width,0);
+        }
+        GL11.glEnd();
+        
+        GL11.glPopMatrix();
+        
+    }
+}
