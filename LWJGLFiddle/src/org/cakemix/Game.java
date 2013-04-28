@@ -1,6 +1,6 @@
 package org.cakemix;
 
-import org.cakemix.Entities.Player;
+import org.cakemix.Entities.*;
 import java.io.File;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
@@ -26,7 +26,7 @@ public class Game {
     
     // hurum, test sprite
     protected Player testy;
-    
+    protected Entity testy2;
     /**
      * Start the game
      * Create the window, call init()
@@ -56,6 +56,7 @@ public class Game {
         isRunning = true;
         // set up test sprite
         testy = new Player("img/ship.png", 64, 64);
+        testy2 = new Entity("img/ship.png", 64, 64);
         while ( !Display.isCloseRequested()){
             
             update();
@@ -93,6 +94,9 @@ public class Game {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         
+        // change background colour
+        GL11.glClearColor(1,1,1,1);
+        
         // not sure bout these, but they make it work
         // Look into this one later...
         GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -110,6 +114,8 @@ public class Game {
         timer.update();
         
         testy.update(timer);
+        testy2.update(timer);
+        
     }
     
     /**
@@ -118,10 +124,12 @@ public class Game {
      */
     public void render(){
         // clear the screen ready for next frame
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
+        //GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); 
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         
         // render test sprite
         testy.draw();
+        testy2.draw();
         
         //update the display
         Display.update();

@@ -4,6 +4,7 @@
  */
 package org.cakemix.Entities;
 
+import org.cakemix.Graphics.ParticleEngine.Emitter;
 import org.cakemix.Timer;
 import org.lwjgl.input.Keyboard;
 
@@ -19,6 +20,8 @@ public class Player extends Entity {
     // Used for holding keys
     // 0= up, 1 = down, 2 = left, 3 = right
     boolean[] move = new boolean[4];
+    // used for engine trails and such (okasy, this is testing, but hey
+    Emitter emitter;
 
     /*
      * Create a new Player @param location location of sprite to be loaded
@@ -26,8 +29,8 @@ public class Player extends Entity {
      * @param height Height of the players frame (used for sprite and collision)
      */
     public Player(String location, int width, int height) {
-
         super(location, width, height);
+        emitter = new Emitter(200, 0, 0, 100);
     }
 
     /*
@@ -36,6 +39,9 @@ public class Player extends Entity {
     @Override
     public void update(Timer timer) {
         handleInput(timer);
+        emitter.updatePosition(position);
+        emitter.update(timer);
+        
         super.update(timer);
     }
 
@@ -107,5 +113,11 @@ public class Player extends Entity {
         }
         // Finally, update the velocity
         incrementVelocity(deltaX, deltaY);
+    }
+    
+    @Override
+    public void draw(){
+        super.draw();
+        emitter.draw();
     }
 }
