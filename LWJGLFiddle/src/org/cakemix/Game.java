@@ -2,6 +2,7 @@ package org.cakemix;
 
 import org.cakemix.Entities.*;
 import java.io.File;
+import org.cakemix.Graphics.ParticleEngine.Emitter;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.input.*;
@@ -27,6 +28,7 @@ public class Game {
     // hurum, test sprite
     protected Player testy;
     protected Entity testy2;
+    protected Emitter testy3;
     /**
      * Start the game
      * Create the window, call init()
@@ -57,6 +59,7 @@ public class Game {
         // set up test sprite
         testy = new Player("img/ship.png", 64, 64);
         testy2 = new Entity("img/ship.png", 64, 64);
+        testy3 = new Emitter(1000, 250,250, 250);
         while ( !Display.isCloseRequested()){
             
             update();
@@ -95,7 +98,7 @@ public class Game {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         
         // change background colour
-        GL11.glClearColor(1,1,1,1);
+        //GL11.glClearColor(1,1,1,1);
         
         // not sure bout these, but they make it work
         // Look into this one later...
