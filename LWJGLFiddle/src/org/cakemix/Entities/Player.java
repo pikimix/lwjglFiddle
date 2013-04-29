@@ -30,7 +30,7 @@ public class Player extends Entity {
      */
     public Player(String location, int width, int height) {
         super(location, width, height);
-        emitter = new Emitter(200, 0, 0, 100);
+        emitter = new Emitter(2000, 0, 0,100);
     }
 
     /*
