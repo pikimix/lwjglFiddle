@@ -18,7 +18,7 @@ public class Emitter {
     // Store the particles
     protected Particle[] particle;
     // Max new particles per tick
-    protected int genRate = 100;
+    protected int genRate = 10;
     // default Time to live
     protected int timeToLive = 250;
     // Emitter position
@@ -46,7 +46,6 @@ public class Emitter {
     protected void generate(Timer timer) {
         int created = 0;
         
-        
         for (int i = 0; i < particle.length; i++) {
             if (particle[i] == null) {
                 particle[i] = new Particle(position.x, position.y,
@@ -66,7 +65,7 @@ public class Emitter {
     protected void cull(Timer timer) {
         for (int i = 0; i < particle.length; i++) {
             if (particle[i] != null) {
-                if (particle[i].hasDied(timer.getTime())) {
+                if (particle[i].hasDied()) {
                     particle[i] = null;
                 }
             }
@@ -76,6 +75,11 @@ public class Emitter {
     public void update(Timer timer) {
         cull(timer);
         generate(timer);
+        for (int i = 0; i < particle.length; i++) {
+            if (particle[i] != null) {
+                particle[i].update(timer);
+            }
+        }
     }
 
     public void updatePosition(Vector2f position) {
@@ -84,12 +88,14 @@ public class Emitter {
 
     public void draw() {
         // Store the Curent model Matrix
-        //GL11.glPushMatrix();
+        GL11.glPushMatrix();
+        
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-        // enable point drawingand blending
+        // enable point drawing and blending
         GL11.glEnable(GL11.GL_POINT_SMOOTH);
         //set point size
-        GL11.glPointSize(10.0f);
+        GL11.glPointSize(2.0f);
 
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -105,5 +111,7 @@ public class Emitter {
 
         GL11.glEnd();
         
+        GL11.glPopMatrix();
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 }
