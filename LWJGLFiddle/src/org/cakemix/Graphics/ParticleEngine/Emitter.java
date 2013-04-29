@@ -16,7 +16,7 @@ import org.lwjgl.util.vector.Vector4f;
 public class Emitter {
 
     // Store the particles
-    protected Particle[] particle;
+    protected PointParticle[] particle;
     // Max new particles per tick
     protected int genRate = 10;
     // default Time to live
@@ -25,21 +25,35 @@ public class Emitter {
     protected Vector2f position;
     // If set, particles are generated psudo randomly around 
     // emitter position, based on jitterRadius
-    protected boolean jitter = true;
+    protected boolean jitter = false;
     protected float jitterRadius = 5;
     // Default colour for created particles
     protected Vector4f colour = new Vector4f(1, 1, 1, 1);
     // turn it on or off
     // usefull so it doesnt do its shit when it cant be seen
     protected boolean emiting = false;
+    
+    // textureID for the textured particles
+    protected int textureID;
 
     /*
-     * Create a new emitter @param numPart Number of particles (max)
+     * Create a new emitter 
+     * @param numPart Number of particles (max)
      */
     public Emitter(int numPart, int x, int y, int ttl) {
-        particle = new Particle[numPart];
+        particle = new PointParticle[numPart];
         position = new Vector2f(x, y);
         timeToLive = ttl;
+    }
+    
+    /*
+     *  Create a textured emitter
+     */
+    public Emitter(String location, int numPart, int x, int y, int ttl){
+        particle = new TexturedParticle[numPart];
+        position = new Vector2f(x, y);
+        timeToLive = ttl;
+        
     }
 
     // create new particles
@@ -48,7 +62,7 @@ public class Emitter {
         
         for (int i = 0; i < particle.length; i++) {
             if (particle[i] == null) {
-                particle[i] = new Particle(position.x, position.y,
+                particle[i] = new PointParticle(position.x, position.y,
                         colour.x, colour.y, colour.z, colour.w,
                         timer.getTime(), timeToLive);
                 created++;

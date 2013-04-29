@@ -19,12 +19,12 @@ public class Sprite {
     //sprites curent frame
     protected int frameIndex;
 
-    public Sprite(String location, int width, int height) {
+    public Sprite(String location) {
 
         BufferedImage texture = TextureLoader.loadImage(location);
+        width = texture.getWidth();
+        height = texture.getHeight();
         textureID = TextureLoader.loadTexture(texture);
-        this.width = width;
-        this.height = height;
     }
 
     /*

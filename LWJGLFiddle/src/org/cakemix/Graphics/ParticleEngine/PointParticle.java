@@ -13,7 +13,7 @@ import org.lwjgl.util.vector.Vector4f;
  *
  * @author cakemix
  */
-public class Particle {
+public class PointParticle {
 
     //Particles Position and Velocity (Similar to entity...)
     protected Vector2f position,
@@ -31,7 +31,7 @@ public class Particle {
      * @param textureID the id of the texture to be rendered, held in emitter
      * @param ctime Current Time (becomes createdTime)
      */
-    public Particle(float x, float y, float r, float g, float b, float a,
+    public PointParticle(float x, float y, float r, float g, float b, float a,
             long cTime, int ttl) {
         position = new Vector2f(x, y);
         colour = new Vector4f(r, g, b, a);

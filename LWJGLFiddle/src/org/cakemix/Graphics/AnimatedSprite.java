@@ -37,7 +37,9 @@ public class AnimatedSprite extends Sprite {
     
     public AnimatedSprite(String location, int width, int height) {
         
-        super(location, width, height);
+        super(location);
+        frameWidth = width;
+        frameHeight = height;
     }
     
     /*
@@ -63,18 +65,21 @@ public class AnimatedSprite extends Sprite {
     public float[] getFrame(){
         // default to full texture
         float[] frame = {0f,0f,1f,1f};
-        float totalWidth = frameWidth*atlasWidth,
-            totalHeight = frameHeight * atlasHeight;
+        
+        // DONT FORGET THE CASTS!!!
+        // Will do integer division otherwise
+        // ie, it will = 0!
+        
         // get the x value
-        frame[0] = currentFrame[0] * ( frameWidth/totalWidth );
+        frame[0] = currentFrame[0] * ( frameWidth/(float)width );
         // Get the y value
-        frame[1] = currentFrame[1] * ( frameHeight/totalHeight );
+        frame[1] = currentFrame[1] * ( frameHeight/(float)height );
         // get the x + u value
-        frame[2] = (currentFrame[0] *  ( frameWidth/totalWidth) ) +
-                    ( frameWidth/totalWidth ) ;
+        frame[2] = (currentFrame[0] *  ( frameWidth/(float)width) ) +
+                    ( frameWidth/(float)width ) ;
         // get the y + v value
-        frame[3] = (currentFrame[1] * ( frameHeight/totalHeight ) ) +
-                    ( frameHeight/totalHeight );
+        frame[3] = (currentFrame[1] * ( frameHeight/(float)height ) ) +
+                    ( frameHeight/(float)height );
         // return the frame value
         return frame;
     }
@@ -139,15 +144,15 @@ public class AnimatedSprite extends Sprite {
             
             // top right
             GL11.glTexCoord2d(frame[0], frame[3]);
-	    GL11.glVertex2i(0, height);
+	    GL11.glVertex2i(0, frameHeight);
 	    
             // bottom left
             GL11.glTexCoord2d(frame[2], frame[3]);
-	    GL11.glVertex2i(width,height);
+	    GL11.glVertex2i(frameWidth,frameHeight);
 	    
             // bottom right
             GL11.glTexCoord2d(frame[2], frame[1]);
-	    GL11.glVertex2i(width,0);
+	    GL11.glVertex2i(frameWidth,0);
         }
         // done doin shit and stuff
         GL11.glEnd();
