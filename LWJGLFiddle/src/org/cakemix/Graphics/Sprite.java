@@ -35,7 +35,10 @@ public class Sprite {
         // use this for animation code 
         // in sub class
     }
-
+    
+    public int getWidth(){ return width; }
+    public int getHeght(){ return height; }
+    
     /*
      * Render the Sprite
      */

@@ -141,18 +141,4 @@ public class Game {
         Display.sync(60);
     }
     
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // load lwjgl native librarys
-        System.setProperty("org.lwjgl.librarypath", 
-                new File(new File(System.getProperty("user.dir"), "native"), 
-                LWJGLUtil.getPlatformName()).getAbsolutePath());
-        System.setProperty("net.java.games.input.librarypath", 
-                System.getProperty("org.lwjgl.librarypath"));
-        new Game().start();
-      
-    }
 }
