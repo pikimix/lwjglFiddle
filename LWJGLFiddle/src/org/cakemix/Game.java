@@ -60,7 +60,7 @@ public class Game {
         testy = new Player("img/ship.png", 64, 64);
         testy2 = new Entity("img/ship.png", 64, 64);
         testy3 = new Emitter(1000, 250,250, 250);
-        while ( !Display.isCloseRequested()){
+        while ( /*!Display.isCloseRequested() && */ isRunning){
             
             update();
             
@@ -71,7 +71,9 @@ public class Game {
         // send it to the falmes!
         Display.destroy();
         
-        System.exit(0);
+        // Exit the program with exit code 1
+        // Success!
+        System.exit(1);
     }
     
     /**

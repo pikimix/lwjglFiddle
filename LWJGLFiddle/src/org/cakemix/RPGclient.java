@@ -6,6 +6,8 @@ package org.cakemix;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.JFrame;
 import org.lwjgl.LWJGLUtil;
@@ -42,8 +44,18 @@ public class RPGclient {
         frame.pack();
         frame.setVisible(true);
 
+        final Game game = new Game();
         
-        new Game().start();
+        frame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent we) {
+                     game.isRunning = false;
+                     //System.exit(1);
+                    }
+        });
+        
+        game.start();
+        //new Game().start();
 
     }
 
