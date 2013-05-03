@@ -6,10 +6,15 @@ package org.cakemix;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.Dimension;
+import java.awt.Label;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import javax.swing.JFrame;
+import javax.swing.*;
+import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.opengl.Display;
 
@@ -29,33 +34,55 @@ public class RPGclient {
         // create the frame to hold the window
         JFrame frame = new JFrame();
 
+        JLabel lbl = new JLabel("Hello");
+
+        JScrollPane panel = new JScrollPane(lbl,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        panel.setPreferredSize(new Dimension(128,128));
+        panel.setMinimumSize(new Dimension(128, 128));
+
         // Create a new canvas and set its size.
         Canvas canvas = new Canvas();
-        // Must be 640*480 to match the size of an Env3D window
-        canvas.setSize(800, 600);
+        canvas.setSize(640, 480);
         // This is the magic!  The setParent method attaches the
         // opengl window to the awt canvas.
         try {
             Display.setParent(canvas);
-        } catch (Exception e) {
+        } catch (LWJGLException e) { // if it fails print out the error
+            e.printStackTrace();
+            System.exit(0);
         }
+
+        // textbox
+        JTextField chat = new JTextField();
+
+        frame.add(panel, BorderLayout.WEST);
         frame.add(canvas, BorderLayout.CENTER);
+        frame.add(chat, BorderLayout.SOUTH);
 
         frame.pack();
         frame.setVisible(true);
 
         final Game game = new Game();
-        
+
         frame.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent we) {
-                     game.isRunning = false;
-                     //System.exit(1);
-                    }
+            @Override
+            public void windowClosing(WindowEvent we) {
+                game.isRunning = false;
+            }
         });
-        
+
+//        frame.addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentResized(ComponentEvent e) {
+//                pane.setSize(top.getRightComponent().getSize());
+//                canvas.setSize(pane.getSize());
+//            }
+//        });
+
         game.start();
-        //new Game().start();
 
     }
 
@@ -66,10 +93,10 @@ public class RPGclient {
                 LWJGLUtil.getPlatformName()).getAbsolutePath());
         System.setProperty("net.java.games.input.librarypath",
                 System.getProperty("org.lwjgl.librarypath"));
-        
+
         // create an arg[] check to see if its requesting
         // client or server mode
-        
+
         // run the client
         new RPGclient();
     }
