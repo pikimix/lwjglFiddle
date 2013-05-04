@@ -37,7 +37,7 @@ public class Sprite {
     }
     
     public int getWidth(){ return width; }
-    public int getHeght(){ return height; }
+    public int getHeight(){ return height; }
     
     /*
      * Render the Sprite

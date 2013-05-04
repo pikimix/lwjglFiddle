@@ -42,6 +42,16 @@ public class AnimatedSprite extends Sprite {
         frameHeight = height;
     }
     
+    @Override
+    public int getWidth(){
+        return frameWidth;
+    }
+    
+    @Override
+    public int getHeight(){
+        return frameHeight;
+    }
+    
     /*
      * Setup new atlas
      * used for non basic sheets
@@ -127,7 +137,7 @@ public class AnimatedSprite extends Sprite {
         
         // Bind to the texture
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-        
+       
         // Move to correct location
         GL11.glTranslatef(x, y, 0);
         // set color (tint and alpha)

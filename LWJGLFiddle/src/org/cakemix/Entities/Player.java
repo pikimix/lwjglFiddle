@@ -4,9 +4,9 @@
  */
 package org.cakemix.Entities;
 
-import org.cakemix.Graphics.ParticleEngine.Emitter;
 import org.cakemix.Timer;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
 
 /**
  *
@@ -21,7 +21,6 @@ public class Player extends Entity {
     // 0= up, 1 = down, 2 = left, 3 = right
     boolean[] move = new boolean[4];
     // used for engine trails and such (okasy, this is testing, but hey
-    Emitter emitter;
 
     /*
      * Create a new Player @param location location of sprite to be loaded
@@ -30,7 +29,6 @@ public class Player extends Entity {
      */
     public Player(String location, int width, int height) {
         super(location, width, height);
-        emitter = new Emitter(2000, 0, 0,100);
     }
 
     /*
@@ -39,9 +37,8 @@ public class Player extends Entity {
     @Override
     public void update(Timer timer) {
         handleInput(timer);
-        emitter.updatePosition(position);
-        emitter.update(timer);
-        
+        screenCheck();
+
         super.update(timer);
     }
 
@@ -114,10 +111,29 @@ public class Player extends Entity {
         // Finally, update the velocity
         incrementVelocity(deltaX, deltaY);
     }
-    
+
+    /*
+     * Keep the player on the screen
+     */
+    protected void screenCheck() {
+        if (position.x < 0) {
+            position.x = 0;
+        } else {
+            if (position.x + sprite.getWidth() > Display.getWidth()) {
+                position.x = Display.getWidth() - sprite.getWidth();
+            }
+        }
+        if (position.y < 0) {
+            position.y = 0;
+        } else {
+            if (position.y + sprite.getHeight() > Display.getHeight()) {
+                position.y = Display.getHeight() - sprite.getHeight();
+            }
+        }
+    }
+
     @Override
-    public void draw(){
+    public void draw() {
         super.draw();
-        emitter.draw();
     }
 }

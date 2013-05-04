@@ -12,7 +12,7 @@ import org.lwjgl.util.vector.Vector2f;
 public class Entity {
 
     // entities sprite
-    private Sprite sprite;
+    protected Sprite sprite;
     // Entities current velocity and position
     protected Vector2f velocity, position;
     // entities max velocity
@@ -88,10 +88,23 @@ public class Entity {
     }
 
     /*
+     * return the value given as a grid co-ordinate
+     * @param value Absolute co-ordinate Value
+     * @param size Grid size
+     * @return value clamped to grid size
+     */
+    public float clampToGrid(float value, float size){
+        //clamp to 64's
+        return (int)(value/size) * size;
+    }
+    
+    /*
      *
      * Render sprite at {x, y}
      */
     public void draw() {
+        
         sprite.draw(position.x, position.y);
+        //sprite.draw(clampToGrid(position.x,64), clampToGrid(position.y,64));
     }
 }
