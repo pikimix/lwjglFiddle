@@ -40,7 +40,9 @@ public class AnimatedSprite extends Sprite {
         frameWidth = width;
         frameHeight = height;
     }
-
+    
+    //Make the width and height of the sprite the same as frame size
+    // scaling handled in the draw function
     @Override
     public int getWidth() {
         return frameWidth;
