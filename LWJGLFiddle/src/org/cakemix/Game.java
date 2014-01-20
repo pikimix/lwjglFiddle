@@ -20,7 +20,6 @@ public class Game {
 
     // global level vars
     protected boolean isRunning = false;
-    public Dimension newDim;
 
     SpriteFont font;
 
@@ -42,16 +41,13 @@ protected Player testy;
     public void start(){
         // catch any errors
         try {
-
-            width = Display.getParent().getWidth();
-            height = Display.getParent().getHeight();
-
-            Display.create();
+            
             //set the display mode
             Display.setDisplayMode(new DisplayMode(width,height));
             //Set the display to be resizeable
             Display.setResizable(true);
             // create window with above params
+            Display.create();
         } catch (LWJGLException e){
             // print out any errors
             e.printStackTrace();
@@ -70,7 +66,7 @@ protected Player testy;
 
         font = new SpriteFont("img/font.png");
 
-        while ( /*!Display.isCloseRequested() && */ isRunning){
+        while ( !Display.isCloseRequested() && isRunning){
             if (Display.wasResized()){
                 //try{
                 width = Display.getWidth();
@@ -79,7 +75,6 @@ protected Player testy;
                 initGL();
                 //GL11.glViewport(0, 0, newDim.width, newDim.height);
 
-                newDim = null;
                 /*} catch (LWJGLException e){
                     e.printStackTrace();
                     System.exit(0);
@@ -124,7 +119,10 @@ protected Player testy;
         // Dont want to waste its time with 3d gumph
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
+//        GL11.glDisable(GL11.GL_LIGHTING);
+        
         // enable alpha blending
+        // for sweet, sweet transparency
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 

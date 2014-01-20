@@ -21,7 +21,7 @@ public class Sprite {
 
     public Sprite(String location) {
 
-        BufferedImage texture = TextureLoader.loadImage(location);
+        BufferedImage texture = TextureLoader.loadImage(System.getProperty("user.dir") + '/' +location);
         width = texture.getWidth();
         height = texture.getHeight();
         textureID = TextureLoader.loadTexture(texture);
@@ -55,19 +55,22 @@ public class Sprite {
         GL11.glColor3f(1, 1, 1);
 
         // Draw textured Quad to match the sprite
-        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glBegin(GL11.GL_TRIANGLES);
         {
             GL11.glTexCoord2d(0, 0);
             GL11.glVertex2i(0, 0);
-
             GL11.glTexCoord2d(0, 1f);
             GL11.glVertex2i(0, height);
-
             GL11.glTexCoord2d(1f, 1f);
             GL11.glVertex2i(width, height);
-
+            
+            GL11.glTexCoord2d(1f, 1f);
+            GL11.glVertex2i(width, height);
             GL11.glTexCoord2d(1f, 0);
             GL11.glVertex2i(width, 0);
+            GL11.glTexCoord2d(0, 0);
+            GL11.glVertex2i(0, 0);
+            
         }
         GL11.glEnd();
 

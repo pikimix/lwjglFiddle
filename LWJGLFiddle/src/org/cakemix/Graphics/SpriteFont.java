@@ -14,12 +14,12 @@ public class SpriteFont extends Sprite {
 
     int frameWidth = 0;
     int frameHeight = 0;
+    float scale = 1.0f;
 
     public SpriteFont(String location) {
         super(location);
         frameWidth = width / 16;
         frameHeight = height / 16;
-        System.out.println(frameWidth);
     }
 
     /**
@@ -68,6 +68,9 @@ public class SpriteFont extends Sprite {
         // ie. All the quads I've drawn
         GL11.glPushMatrix();
 
+        // enable something that allows tinting
+        GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+
         // Bind to the texture
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
@@ -76,27 +79,32 @@ public class SpriteFont extends Sprite {
         // set color (tint and alpha)
         // need to get a variable control on the alpha
         // oooo, swanky transparency effects xD
-        GL11.glColor4f(1, 1, 1, 1);
+        GL11.glColor4f(0, 0, 0, 0.5f);
 
         // Draw textured Quad to match the sprite
-        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glBegin(GL11.GL_TRIANGLES);
         {
             // top left
             GL11.glTexCoord2d(frame[0], frame[1]);
             GL11.glVertex2i(0, 0);
-
-            // top right
-            GL11.glTexCoord2d(frame[0], frame[3]);
-            GL11.glVertex2i(0, frameHeight);
-
             // bottom left
+            GL11.glTexCoord2d(frame[0], frame[3]);
+            GL11.glVertex2i(0, (int) (frameHeight * scale));
+            // bottom right
             GL11.glTexCoord2d(frame[2], frame[3]);
-            GL11.glVertex2i(frameWidth, frameHeight);
+            GL11.glVertex2i((int) (frameWidth * scale), (int) (frameHeight * scale));
 
             // bottom right
+            GL11.glTexCoord2d(frame[2], frame[3]);
+            GL11.glVertex2i((int) (frameWidth * scale), (int) (frameHeight * scale));
+            // top right
             GL11.glTexCoord2d(frame[2], frame[1]);
-            GL11.glVertex2i(frameWidth, 0);
+            GL11.glVertex2i((int) (frameWidth * scale), 0);
+            // top left
+            GL11.glTexCoord2d(frame[0], frame[1]);
+            GL11.glVertex2i(0, 0);
         }
+        
         // done doin shit and stuff
         GL11.glEnd();
 
@@ -105,13 +113,13 @@ public class SpriteFont extends Sprite {
         GL11.glPopMatrix();
     }
 
-    public void drawString( String string, int x, int y ){
-        for (int i = 0; i < string.length(); i++){
-            drawCharacter(string.charAt(i), x + (frameWidth * i), y);
+    public void drawString(String string, int x, int y) {
+        for (int i = 0; i < string.length(); i++) {
+            drawCharacter(string.charAt(i), x + ((int) (frameWidth * scale) * i), y);
         }
     }
 
-    public void drawString( int string, int x, int y ){
+    public void drawString(int string, int x, int y) {
         drawString(Integer.toString(string), x, y);
     }
 }
