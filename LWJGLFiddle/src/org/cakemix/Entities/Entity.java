@@ -12,7 +12,7 @@ import org.lwjgl.util.vector.Vector2f;
 public class Entity {
 
     // entities sprite
-    protected Sprite sprite;
+    protected AnimatedSprite sprite;
     // Entities current velocity and position
     protected Vector2f velocity, position;
     // entities max velocity
@@ -45,6 +45,16 @@ public class Entity {
         // update entitys position
         position.x += velocity.x;
         position.y += velocity.y;
+        if (velocity.x > velocity.y){
+            if (velocity.x != 0){
+                if (velocity.x > 1) {
+                    sprite.changeDirection(Direction.EAST);
+                }else{
+                    
+                }
+
+            }
+        }
     }
 
     /*
@@ -97,13 +107,13 @@ public class Entity {
         //clamp to 64's
         return (int)(value/size) * size;
     }
-    
+
     /*
      *
      * Render sprite at {x, y}
      */
     public void draw() {
-        
+
         sprite.draw(position.x, position.y);
         //sprite.draw(clampToGrid(position.x,64), clampToGrid(position.y,64));
     }
