@@ -32,19 +32,22 @@ public class Sprite {
      * Nothing really needed in here
      */
     public void update(Timer timer) {
-        // use this for animation code 
+        // use this for animation code
         // in sub class
     }
-    
+
     public int getWidth(){ return width; }
     public int getHeight(){ return height; }
-    
+
     /*
      * Render the Sprite
      */
     public void draw(float x, float y) {
         // Store the Curent model Matrix
         GL11.glPushMatrix();
+
+        //enable textures (just incase)
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         // Bind to the texture
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
@@ -63,14 +66,14 @@ public class Sprite {
             GL11.glVertex2i(0, height);
             GL11.glTexCoord2d(1f, 1f);
             GL11.glVertex2i(width, height);
-            
+
             GL11.glTexCoord2d(1f, 1f);
             GL11.glVertex2i(width, height);
             GL11.glTexCoord2d(1f, 0);
             GL11.glVertex2i(width, 0);
             GL11.glTexCoord2d(0, 0);
             GL11.glVertex2i(0, 0);
-            
+
         }
         GL11.glEnd();
 

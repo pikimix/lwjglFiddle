@@ -4,6 +4,8 @@
  */
 package org.cakemix.Graphics;
 
+import org.cakemix.Game;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -14,7 +16,7 @@ public class SpriteFont extends Sprite {
 
     int frameWidth = 0;
     int frameHeight = 0;
-    float scale = 1.0f;
+    float scale = 1;//Game.scale;
 
     public SpriteFont(String location) {
         super(location);
@@ -61,6 +63,27 @@ public class SpriteFont extends Sprite {
         return frame;
     }
 
+    public int getCharWidth() {
+        return (int) (frameWidth * scale);
+    }
+
+    public int getCharHeight() {
+        return (int) (frameHeight * scale);
+    }
+
+    public void drawTest() {
+        int x = 0, y = 0;
+        for (int c = 0; c < 256; c++) {
+            drawCharacter((char) c, x * frameWidth, y * frameHeight);
+            x++;
+            if (x > 15) {
+                x = 0;
+                y++;
+            }
+
+        }
+    }
+
     public void drawCharacter(char character, int x, int y) {
         float[] frame = getFrame(charToAscii(character));
 
@@ -71,19 +94,23 @@ public class SpriteFont extends Sprite {
         // enable something that allows tinting
         GL11.glTexEnvf(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
 
+        //enable textures (just incase)
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+
         // Bind to the texture
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
         // Move to correct location
-        GL11.glTranslatef(x, y, 0);
+        GL11.glTranslatef(x, y, 0);//x * scale, y * scale, 0);
         // set color (tint and alpha)
         // need to get a variable control on the alpha
         // oooo, swanky transparency effects xD
-        GL11.glColor4f(0, 0, 0, 0.5f);
+        GL11.glColor4f(0, 0, 0, 1f);
 
         // Draw textured Quad to match the sprite
         GL11.glBegin(GL11.GL_TRIANGLES);
         {
+
             // top left
             GL11.glTexCoord2d(frame[0], frame[1]);
             GL11.glVertex2i(0, 0);
@@ -104,7 +131,7 @@ public class SpriteFont extends Sprite {
             GL11.glTexCoord2d(frame[0], frame[1]);
             GL11.glVertex2i(0, 0);
         }
-        
+
         // done doin shit and stuff
         GL11.glEnd();
 
@@ -114,8 +141,16 @@ public class SpriteFont extends Sprite {
     }
 
     public void drawString(String string, int x, int y) {
+        int linePos = x;
         for (int i = 0; i < string.length(); i++) {
-            drawCharacter(string.charAt(i), x + ((int) (frameWidth * scale) * i), y);
+
+            if (string.charAt(i) == '\n') {
+                y = (int) (y + frameHeight * scale);
+                linePos=x-1;
+            } else {
+                drawCharacter(string.charAt(i), x + ((int) (frameWidth * scale) * linePos), y);
+                linePos++;
+            }
         }
     }
 

@@ -1,13 +1,12 @@
 package org.cakemix;
 
-import java.awt.Dimension;
-import org.cakemix.Entities.*;
-import java.io.File;
-import org.cakemix.Graphics.ParticleEngine.Emitter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.cakemix.Entities.Player;
 import org.cakemix.Graphics.SpriteFont;
+import org.cakemix.Graphics.TileSet;
+import org.cakemix.world.Map;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.LWJGLUtil;
-import org.lwjgl.input.*;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -20,35 +19,32 @@ public class Game {
 
     // global level vars
     protected boolean isRunning = false;
-
-    SpriteFont font;
-
+    public static SpriteFont font;
     // width / height of window
     protected int width = 800, height = 600;
-
     // setup timer
-    protected Timer timer;
+    public static Timer timer;
+    // world map
+    protected Map map;
+    public static float scale = 1f, scaley = 1f, ratio = 800 / 600f;
 
-    // hurum, test sprite
-protected Player testy;
     /**
-     * Start the game
-     * Create the window, call init()
-     * then run the game loop
-     * until either the window dies
-     * or isRunning is changed to false
+     * Start the game Create the window, call init() then run the game loop until either the window dies or isRunning is changed to false
      */
-    public void start(){
+    public void start() {
         // catch any errors
         try {
-            
+
+
             //set the display mode
-            Display.setDisplayMode(new DisplayMode(width,height));
+            Display.setDisplayMode(new DisplayMode(width, height));
+
             //Set the display to be resizeable
             Display.setResizable(true);
+
             // create window with above params
             Display.create();
-        } catch (LWJGLException e){
+        } catch (LWJGLException e) {
             // print out any errors
             e.printStackTrace();
             // exit
@@ -61,24 +57,22 @@ protected Player testy;
         // while close is not requested
         // run logic/ render loops
         isRunning = true;
-        // set up test sprite
-        testy = new Player("img/ship.png", 64, 64);
+
+        map = new Map();
+
+
 
         font = new SpriteFont("img/font.png");
 
-        while ( !Display.isCloseRequested() && isRunning){
-            if (Display.wasResized()){
-                //try{
+        while (!Display.isCloseRequested() && isRunning) {
+            if (Display.wasResized()) {
                 width = Display.getWidth();
                 height = Display.getHeight();
-                //Display.setDisplayMode(new DisplayMode(newDim.width, newDim.height));
                 initGL();
-                //GL11.glViewport(0, 0, newDim.width, newDim.height);
 
-                /*} catch (LWJGLException e){
-                    e.printStackTrace();
-                    System.exit(0);
-                }*/
+                scale = width / 800f;
+                scaley = height / 600f;
+                ratio = (width / (float) height);
             }
 
             update();
@@ -95,19 +89,17 @@ protected Player testy;
         System.exit(1);
     }
 
-
     /**
-     * Initialise anything that needs it
-     * Mainly for opengl at the moment
+     * Initialise anything that needs it Mainly for opengl at the moment
      */
-    public void init(){
+    public void init() {
         //initialise the timer
         timer = new Timer();
 
         initGL();
     }
 
-    protected void initGL(){
+    protected void initGL() {
         // Initialise opengl
         // Before we can do anything, we need to init opengl
 
@@ -120,55 +112,49 @@ protected Player testy;
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
 //        GL11.glDisable(GL11.GL_LIGHTING);
-        
+
         // enable alpha blending
         // for sweet, sweet transparency
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         // change background colour
-        GL11.glClearColor(1,1,1,1);
+        GL11.glClearColor(1, 1, 1, 1);
 
         // not sure bout these, but they make it work
         // Look into this one later...
         GL11.glMatrixMode(GL11.GL_PROJECTION);
-	GL11.glLoadIdentity();
+        GL11.glLoadIdentity();
 
-	GL11.glOrtho(0, width, height, 0, -1, 1);
+        GL11.glOrtho(0, width, height, 0, -1, 1);
     }
 
     /**
-     * Update game loop
-     * For user input and shit
+     * Update game loop For user input and shit
      */
-    public void update(){
+    public void update() {
         // update game timer
         timer.update();
 
-        testy.update(timer);
-
+        map.update();
     }
 
     /**
-     * Render loop
-     * For drawing and shit
+     * Render loop For drawing and shit
      */
-    public void render(){
+    public void render() {
         // clear the screen ready for next frame
         //GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
-        // render test sprite
-        testy.draw();
-
-        font.drawString("Width = " + Integer.toString(Display.getWidth()),0, 0);
-        font.drawString("Height= " + Integer.toString(Display.getHeight()),0, 32);
-
+        map.draw();
+        font.drawString("scale X" + scale + '\n'
+                + " fake X" + (int)(width / scale) + " Y" + (int)(height / scale)
+                , 1, 0);
         //update the display
         Display.update();
         GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
         // Limit rendering to 60 fps
         Display.sync(60);
     }
-
 }

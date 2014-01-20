@@ -4,10 +4,12 @@
  */
 package org.cakemix.Graphics;
 
+import org.cakemix.Game;
 import org.cakemix.Timer;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
-/* 
+/*
  * Basic animated sprite
  * 4 polar directions, single animation type
  * Expand this later, either in class or as Xy extends AnimatedSprite
@@ -19,8 +21,6 @@ public class AnimatedSprite extends Sprite {
     // default atlas, 4x4 grid
     protected int atlasWidth = 4,
             atlasHeight = 4;
-    // Scale to draw the sprite too
-    float scale = 1f;
     // current frame
     // co-ordinate index in atlas
     // getFrame() converts this to usable values
@@ -29,7 +29,7 @@ public class AnimatedSprite extends Sprite {
     // Default is 64x64
     protected int frameWidth = 64, frameHeight = 64;
     // Last time the animation frame changed, and
-    // delay between frames 
+    // delay between frames
     // default to 4 fps (250 ms between changes)
     protected long lastFrame = 0,
             frameDelay = 250;
@@ -37,10 +37,9 @@ public class AnimatedSprite extends Sprite {
     public AnimatedSprite(String location, int width, int height) {
 
         super(location);
-        frameWidth = width;
-        frameHeight = height;
+        setAtlas(width, height);
     }
-    
+
     //Make the width and height of the sprite the same as frame size
     // scaling handled in the draw function
     @Override
@@ -60,7 +59,9 @@ public class AnimatedSprite extends Sprite {
     public void setAtlas(int newWidth, int newHeight) {
         //set he atlas to the new values
         atlasWidth = newWidth;
+        frameWidth = width / atlasWidth;
         atlasHeight = newHeight;
+        frameHeight = height/ atlasHeight;
     }
 
     /*
@@ -69,7 +70,7 @@ public class AnimatedSprite extends Sprite {
      * [1] = y
      * [2] = x + u
      * [3] = y + v
-     * 
+     *
      * NOTE:: This function only holds true so long as
      * the atlas and frame sizes are the correct size
      */
@@ -136,11 +137,14 @@ public class AnimatedSprite extends Sprite {
         // ie. All the quads I've drawn
         GL11.glPushMatrix();
 
+        //enable textures (just incase)
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+
         // Bind to the texture
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
         // Move to correct location
-        GL11.glTranslatef(x, y, 0);
+        GL11.glTranslatef(x * Game.scale, y * Game.scale, 0);
         // set color (tint and alpha)
         // need to get a variable control on the alpha
         // oooo, swanky transparency effects xD
@@ -154,17 +158,17 @@ public class AnimatedSprite extends Sprite {
             GL11.glVertex2i(0, 0);
             // bottom left
             GL11.glTexCoord2d(frame[0], frame[3]);
-            GL11.glVertex2i(0, (int) (frameHeight * scale));
+            GL11.glVertex2i(0, (int) (frameHeight * Game.scale));
             // bottom right
             GL11.glTexCoord2d(frame[2], frame[3]);
-            GL11.glVertex2i((int) (frameWidth * scale), (int) (frameHeight * scale));
+            GL11.glVertex2i((int) (frameWidth * Game.scale), (int) (frameHeight * Game.scale));
 
             // bottom right
             GL11.glTexCoord2d(frame[2], frame[3]);
-            GL11.glVertex2i((int) (frameWidth * scale), (int) (frameHeight * scale));
+            GL11.glVertex2i((int) (frameWidth * Game.scale), (int) (frameHeight * Game.scale));
             // top right
             GL11.glTexCoord2d(frame[2], frame[1]);
-            GL11.glVertex2i((int) (frameWidth * scale), 0);
+            GL11.glVertex2i((int) (frameWidth * Game.scale), 0);
             // top left
             GL11.glTexCoord2d(frame[0], frame[1]);
             GL11.glVertex2i(0, 0);

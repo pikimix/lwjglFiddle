@@ -4,6 +4,7 @@
  */
 package org.cakemix.Entities;
 
+import org.cakemix.Game;
 import org.cakemix.Timer;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -23,9 +24,8 @@ public class Player extends Entity {
     // used for engine trails and such (okasy, this is testing, but hey
 
     /*
-     * Create a new Player @param location location of sprite to be loaded
-     * @param width Width of players frame (used for sprite and collision)
-     * @param height Height of the players frame (used for sprite and collision)
+     * Create a new Player @param location location of sprite to be loaded @param width Width of players frame (used for sprite and collision) @param height
+     * Height of the players frame (used for sprite and collision)
      */
     public Player(String location, int width, int height) {
         super(location, width, height);
@@ -119,15 +119,15 @@ public class Player extends Entity {
         if (position.x < 0) {
             position.x = 0;
         } else {
-            if (position.x + sprite.getWidth() > Display.getWidth()) {
-                position.x = Display.getWidth() - sprite.getWidth();
+            if ((position.x/ Game.scale) + (sprite.getWidth()* Game.scale)  > Display.getWidth()) {
+                position.x = (int) ((Display.getWidth() - (sprite.getWidth() * Game.scale)));
             }
         }
         if (position.y < 0) {
             position.y = 0;
         } else {
-            if (position.y + sprite.getHeight() > Display.getHeight()) {
-                position.y = Display.getHeight() - sprite.getHeight();
+            if ((position.y * Game.scale)+ (sprite.getHeight() * Game.scale) > Display.getHeight()) {
+                position.y = (int) ((Display.getHeight() - (sprite.getHeight() * Game.scale)));
             }
         }
     }
@@ -135,5 +135,9 @@ public class Player extends Entity {
     @Override
     public void draw() {
         super.draw();
+        Game.font.drawString("x " + Integer.toString((int) position.x + sprite.getWidth()) + " : y " + Integer.toString((int) position.y + sprite.getHeight()) + '\n'
+                + "Bounds X " + (position.x/ Game.scale) + (sprite.getWidth()* Game.scale)+ ": real h" + sprite.getHeight() + '\n'
+                + "fake w " + sprite.getWidth()*Game.scale + ": fake h" + sprite.getHeight() * Game.scale, 1, 64);
+
     }
 }
