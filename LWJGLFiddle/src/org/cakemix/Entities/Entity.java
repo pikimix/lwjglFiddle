@@ -32,12 +32,11 @@ public class Entity {
 
     /*
      *
-     * Update entity Timer timer used for sprite animation delta{x, y} used to
-     * update entities position
+     * Update entity used to update entities position
      */
-    public void update(Timer timer) {
+    public void update() {
         // update the sprite frame
-        sprite.update(timer);
+        sprite.update();
 
         // apply physics before adding velocity to position
         applyPhysics();
@@ -45,16 +44,9 @@ public class Entity {
         // update entitys position
         position.x += velocity.x;
         position.y += velocity.y;
-        if (velocity.x > velocity.y){
-            if (velocity.x != 0){
-                if (velocity.x > 1) {
-                    sprite.changeDirection(Direction.EAST);
-                }else{
-                    
-                }
 
-            }
-        }
+
+
     }
 
     /*
@@ -78,15 +70,15 @@ public class Entity {
      */
     protected void applyPhysics() {
         // apply drag to both x && y
-        velocity.x *= 0.95;
-        velocity.y *= 0.95;
+        velocity.x *= 0.75;
+        velocity.y *= 0.75;
 
         // if the velocty is super low, make it 0
         // otherwise the entity will never stop
-        if (Math.abs(velocity.x) < 0.1) {
+        if (Math.abs(velocity.x) < 0.5) {
             velocity.x = 0;
         }
-        if (Math.abs(velocity.y) < 0.1) {
+        if (Math.abs(velocity.y) < 0.5) {
             velocity.y = 0;
         }
         // finally make sure your not exceeding max velocty
@@ -95,17 +87,37 @@ public class Entity {
             velocity.normalise();
             velocity.scale(mvX);
         }
+
+        // update sprites direction
+        if (Math.abs(velocity.x) > Math.abs(velocity.y)) {
+            if (velocity.x != 0) {
+                if (velocity.x > 0) {
+                    sprite.changeDirection(Direction.EAST);
+                } else {
+                    sprite.changeDirection(Direction.WEST);
+                }
+            } else {
+                sprite.changeDirection(Direction.SOUTH);
+            }
+        } else {
+            if (velocity.y != 0) {
+                if (velocity.y > 0) {
+                    sprite.changeDirection(Direction.SOUTH);
+                } else {
+                    sprite.changeDirection(Direction.NORTH);
+                }
+            } else {
+                sprite.changeDirection(Direction.SOUTH);
+            }
+        }
     }
 
     /*
-     * return the value given as a grid co-ordinate
-     * @param value Absolute co-ordinate Value
-     * @param size Grid size
-     * @return value clamped to grid size
+     * return the value given as a grid co-ordinate @param value Absolute co-ordinate Value @param size Grid size @return value clamped to grid size
      */
-    public float clampToGrid(float value, float size){
-        //clamp to 64's
-        return (int)(value/size) * size;
+    public int clampToGrid(float value, int size) {
+        //clamp to given grid
+        return (int) (value / size) * size;
     }
 
     /*
@@ -114,7 +126,8 @@ public class Entity {
      */
     public void draw() {
 
-        sprite.draw(position.x, position.y);
-        //sprite.draw(clampToGrid(position.x,64), clampToGrid(position.y,64));
+        sprite.draw((int)position.x, (int)position.y);
+//        sprite.draw(clampToGrid(position.x,sprite.getWidth()), clampToGrid(position.y,sprite.getHeight()));
     }
+
 }

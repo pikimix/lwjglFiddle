@@ -29,7 +29,7 @@ public class Map {
 
     public void update() {
 
-        localPlayer.update(Game.timer);
+        localPlayer.update();
     }
 
     public void draw() {

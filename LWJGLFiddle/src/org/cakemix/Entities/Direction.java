@@ -10,9 +10,9 @@ package org.cakemix.Entities;
  */
 public class Direction {
     public static int
-            NORTH = 0,
-            EAST = 1,
-            SOUTH = 2,
-            WEST  = 3;
+            NORTH = 3,
+            EAST = 2,
+            SOUTH = 0,
+            WEST  = 1;
 
 }

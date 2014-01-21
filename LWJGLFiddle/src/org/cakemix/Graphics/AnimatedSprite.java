@@ -5,7 +5,6 @@
 package org.cakemix.Graphics;
 
 import org.cakemix.Game;
-import org.cakemix.Timer;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
@@ -97,11 +96,11 @@ public class AnimatedSprite extends Sprite {
     }
 
     @Override
-    public void update(Timer timer) {
+    public void update() {
 
-        if (timer.getTime() >= lastFrame + frameDelay) {
+        if (Game.timer.getTime() >= lastFrame + frameDelay) {
             animate();
-            lastFrame = timer.getTime();
+            lastFrame = Game.timer.getTime();
         }
     }
 
@@ -129,7 +128,7 @@ public class AnimatedSprite extends Sprite {
     /*
      * draw sprite at co-ords given
      */
-    public void draw(float x, float y) {
+    public void draw(int x, int y) {
         // get the current frame
         float[] frame = getFrame();
 

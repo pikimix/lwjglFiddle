@@ -31,7 +31,7 @@ public class Sprite {
      *
      * Nothing really needed in here
      */
-    public void update(Timer timer) {
+    public void update() {
         // use this for animation code
         // in sub class
     }
@@ -42,7 +42,7 @@ public class Sprite {
     /*
      * Render the Sprite
      */
-    public void draw(float x, float y) {
+    public void draw(int x, int y) {
         // Store the Curent model Matrix
         GL11.glPushMatrix();
 
