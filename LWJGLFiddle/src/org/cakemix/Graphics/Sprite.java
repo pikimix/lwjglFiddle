@@ -21,6 +21,8 @@ public class Sprite {
 
     public Sprite(String location) {
 
+
+            BufferedImage texture = TextureLoader.loadImage(getClass().getResource(location));
         BufferedImage texture = TextureLoader.loadImage(System.getProperty("user.dir") + '/' +location);
         width = texture.getWidth();
         height = texture.getHeight();
