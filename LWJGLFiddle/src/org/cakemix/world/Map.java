@@ -22,7 +22,7 @@ public class Map {
     protected TileSet tiles;
 
     public Map() {
-        localPlayer = new Player("img/debug3x4.png", 3, 4);
+        localPlayer = new Player("img/debug2x4.png", 2, 4);
         //setup test tileset
         tiles = new TileSet("img/tileset.png");
     }
