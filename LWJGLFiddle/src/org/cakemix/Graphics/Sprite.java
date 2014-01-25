@@ -20,10 +20,9 @@ public class Sprite {
     protected int frameIndex;
 
     public Sprite(String location) {
-
-
-            BufferedImage texture = TextureLoader.loadImage(getClass().getResource(location));
-        BufferedImage texture = TextureLoader.loadImage(System.getProperty("user.dir") + '/' +location);
+       
+        BufferedImage texture = TextureLoader.loadImage(this.getClass().getResourceAsStream('/' +location));
+        //BufferedImage texture = TextureLoader.loadImage(System.getProperty("user.dir") + '/' +location);
         width = texture.getWidth();
         height = texture.getHeight();
         textureID = TextureLoader.loadTexture(texture);

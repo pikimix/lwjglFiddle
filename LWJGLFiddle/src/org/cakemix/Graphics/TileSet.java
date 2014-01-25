@@ -30,7 +30,9 @@ public class TileSet {
     protected int tileWidth = 16, tileHeight = 16;
 
     public TileSet(String location) {
-        BufferedImage texture = TextureLoader.loadImage(System.getProperty("user.dir") + '/' + location);
+ 
+        BufferedImage texture = TextureLoader.loadImage(this.getClass().getResourceAsStream('/' +location));
+        //BufferedImage texture = TextureLoader.loadImage(System.getProperty("user.dir") + '/' + location);
         textureID = TextureLoader.loadTexture(texture);
         width = texture.getWidth();
         height = texture.getHeight();

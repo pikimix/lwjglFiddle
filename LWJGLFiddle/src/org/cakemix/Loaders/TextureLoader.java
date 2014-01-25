@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
@@ -54,11 +55,30 @@ public class TextureLoader {
           return textureID;
        }
 
+       public static BufferedImage loadImage(InputStream file)
+       {
+            try {
+                System.out.println(file);
+               return ImageIO.read(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                System.exit(1);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
+            } catch (java.lang.IllegalArgumentException e){
+                e.printStackTrace();
+                System.exit(1);
+            }
+           return null;
+       }
+       
        public static BufferedImage loadImage(String loc)
        {
             try {
                 //File path = new File(loc);
                //return ImageIO.read(path);
+//               return ImageIO.read(getClass().getResource('/' +loc));
                return ImageIO.read(new FileInputStream(loc));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

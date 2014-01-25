@@ -45,7 +45,6 @@ public class RPGclient {
                 LWJGLUtil.getPlatformName()).getAbsolutePath());
         System.setProperty("net.java.games.input.librarypath",
                 System.getProperty("org.lwjgl.librarypath"));
-        System.out.println(System.getProperty("user.dir"));
         // create an arg[] check to see if its requesting
         // client or server mode
 
