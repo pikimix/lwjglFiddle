@@ -23,7 +23,7 @@ public class Map {
     protected Player localPlayer;
     // test tile set
     protected TileSet tiles;
-    protected int[][] background = new int[10][10];
+    protected int[][] background = new int[30][16];
     int tx = 0, ty = 0;
 
     public Map() {
@@ -34,10 +34,12 @@ public class Map {
     }
 
     private void randomBackground() {
-        Random r = new Random();
-        for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 10; y++) {
-                background[x][y] = r.nextInt(30*16);
+        int t = 0;
+            for (int y = 0; y < 16; y++) {
+        for (int x = 0; x < 30; x++) {
+                background[x][y] = t;
+                t++;
+                System.out.print(background[x][y] + ":");
             }
             
         System.out.println();
@@ -57,8 +59,8 @@ public class Map {
     }
 
     protected void fillTiles() {
-        for (int x = 0; x < 10 /* tiles.getTileWidth() < Display.getWidth()*/; x++) {
-            for (int y = 0; y  < 10 /* tiles.getTileHeight() < Display.getHeight()*/; y++) {
+            for (int y = 0; y  < 16 /* tiles.getTileHeight() < Display.getHeight()*/; y++) {
+        for (int x = 0; x < 30 /* tiles.getTileWidth() < Display.getWidth()*/; x++) {
                 tiles.draw(x, y,background[x][y]);
             }
         }
