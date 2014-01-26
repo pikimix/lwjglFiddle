@@ -1,10 +1,6 @@
 package org.cakemix;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.cakemix.Entities.Player;
 import org.cakemix.Graphics.SpriteFont;
-import org.cakemix.Graphics.TileSet;
 import org.cakemix.world.Map;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -26,7 +22,7 @@ public class Game {
     public static Timer timer;
     // world map
     protected Map map;
-    public static float scale = 1f, scaley = 1f, ratio = 800 / 600f;
+    public static float scale = 1f;
 
     /**
      * Start the game Create the window, call init() then run the game loop until either the window dies or isRunning is changed to false
@@ -71,8 +67,6 @@ public class Game {
                 initGL();
 
                 scale = width / 800f;
-                scaley = height / 600f;
-                ratio = (width / (float) height);
             }
 
             update();
@@ -81,7 +75,6 @@ public class Game {
         }
 
         //Destroy the display once your finished
-        // send it to the falmes!
         Display.destroy();
 
         // Exit the program with exit code 1
@@ -111,15 +104,13 @@ public class Game {
         // Dont want to waste its time with 3d gumph
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-//        GL11.glDisable(GL11.GL_LIGHTING);
-
         // enable alpha blending
         // for sweet, sweet transparency
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         // change background colour
-        GL11.glClearColor(1, 1, 1, 1);
+        GL11.glClearColor(0, 0, 0, 1);
 
         // not sure bout these, but they make it work
         // Look into this one later...
@@ -148,9 +139,9 @@ public class Game {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
         map.draw();
-        font.drawString("scale X" + scale + '\n'
-                + " fake X" + (int)(width / scale) + " Y" + (int)(height / scale)
-                , 1, 0);
+        
+        font.drawString(timer.getFps(), 0, 0);
+        
         //update the display
         Display.update();
         GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());

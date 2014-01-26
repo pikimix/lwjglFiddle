@@ -4,8 +4,6 @@
  */
 package org.cakemix.Graphics;
 
-import org.cakemix.Game;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -85,6 +83,10 @@ public class SpriteFont extends Sprite {
     }
 
     public void drawCharacter(char character, int x, int y) {
+        drawCharacter(character, x, y, scale);
+    }
+
+    public void drawCharacter(char character, int x, int y, float s) {
         float[] frame = getFrame(charToAscii(character));
 
         // Store the Curent model Matrix
@@ -116,17 +118,17 @@ public class SpriteFont extends Sprite {
             GL11.glVertex2i(0, 0);
             // bottom left
             GL11.glTexCoord2d(frame[0], frame[3]);
-            GL11.glVertex2i(0, (int) (frameHeight * scale));
+            GL11.glVertex2i(0, (int) (frameHeight * s));
             // bottom right
             GL11.glTexCoord2d(frame[2], frame[3]);
-            GL11.glVertex2i((int) (frameWidth * scale), (int) (frameHeight * scale));
+            GL11.glVertex2i((int) (frameWidth * s), (int) (frameHeight * s));
 
             // bottom right
             GL11.glTexCoord2d(frame[2], frame[3]);
-            GL11.glVertex2i((int) (frameWidth * scale), (int) (frameHeight * scale));
+            GL11.glVertex2i((int) (frameWidth * s), (int) (frameHeight * s));
             // top right
             GL11.glTexCoord2d(frame[2], frame[1]);
-            GL11.glVertex2i((int) (frameWidth * scale), 0);
+            GL11.glVertex2i((int) (frameWidth * s), 0);
             // top left
             GL11.glTexCoord2d(frame[0], frame[1]);
             GL11.glVertex2i(0, 0);
@@ -140,21 +142,29 @@ public class SpriteFont extends Sprite {
         GL11.glPopMatrix();
     }
 
-    public void drawString(String string, int x, int y) {
+    public void drawString(String string, int x, int y, float s) {
         int linePos = x;
         for (int i = 0; i < string.length(); i++) {
 
             if (string.charAt(i) == '\n') {
-                y = (int) (y + frameHeight * scale);
-                linePos=x-1;
+                y = (int) (y + frameHeight * s);
+                linePos = x - 1;
             } else {
-                drawCharacter(string.charAt(i), x + ((int) (frameWidth * scale) * linePos), y);
+                drawCharacter(string.charAt(i), x + ((int) (frameWidth * s) * linePos), y, s);
                 linePos++;
             }
         }
     }
 
+    public void drawString(String string, int x, int y) {
+        drawString(string, x, y, scale);
+    }
+
     public void drawString(int string, int x, int y) {
         drawString(Integer.toString(string), x, y);
+    }
+
+    public void drawString(int string, int x, int y, float s) {
+        drawString(Integer.toString(string), x, y, s);
     }
 }

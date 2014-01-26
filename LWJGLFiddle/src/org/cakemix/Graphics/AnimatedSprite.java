@@ -5,7 +5,6 @@
 package org.cakemix.Graphics;
 
 import org.cakemix.Game;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 /*

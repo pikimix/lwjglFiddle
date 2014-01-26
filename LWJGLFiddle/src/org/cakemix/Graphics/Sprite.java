@@ -2,7 +2,6 @@ package org.cakemix.Graphics;
 
 import java.awt.image.BufferedImage;
 import org.cakemix.Loaders.TextureLoader;
-import org.cakemix.Timer;
 import org.lwjgl.opengl.GL11;
 
 /**

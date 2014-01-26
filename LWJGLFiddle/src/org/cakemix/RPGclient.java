@@ -4,20 +4,9 @@
  */
 package org.cakemix;
 
-import java.awt.BorderLayout;
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Label;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
-import javax.swing.*;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 
 /**
  *

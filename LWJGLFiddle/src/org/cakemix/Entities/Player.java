@@ -175,16 +175,16 @@ public class Player extends Entity {
     @Override
     public void draw() {
         super.draw();
-        Vector2f delta = new Vector2f();
-        Vector2f.sub(position, mouseDestination, delta);
-        double distance =(delta.x * delta.x) + (delta.y * delta.y);
-        Game.font.drawString("x " + position.x + " :y " + position.y + '\n'
-                + "vx " + velocity.x + " :vy " + velocity.y + '\n'
-                + "mx " + mouseDestination.x + " :my " + mouseDestination.y + '\n'
-                + "dmx " + delta.x + " :dmy " + delta.y + '\n'
-                + "distance " + (int)distance + '\n'
-                + "Bounds x" + (position.x * Game.scale) + (sprite.getWidth() * Game.scale) + ":" + ((position.x * Game.scale) + (sprite.getWidth() * Game.scale) > Display.getWidth()) + '\n'
-                + "Bounds y" + (position.y * Game.scale) + (sprite.getHeight() * Game.scale) + ":" + ((position.y * Game.scale) + (sprite.getHeight() * Game.scale) > Display.getHeight()), 1, 64);
+//        Vector2f delta = new Vector2f();
+//        Vector2f.sub(position, mouseDestination, delta);
+//        double distance =(delta.x * delta.x) + (delta.y * delta.y);
+//        Game.font.drawString("x " + position.x + " :y " + position.y + '\n'
+//                + "vx " + velocity.x + " :vy " + velocity.y + '\n'
+//                + "mx " + mouseDestination.x + " :my " + mouseDestination.y + '\n'
+//                + "dmx " + delta.x + " :dmy " + delta.y + '\n'
+//                + "distance " + (int)distance + '\n'
+//                + "Bounds x" + (position.x * Game.scale) + (sprite.getWidth() * Game.scale) + ":" + ((position.x * Game.scale) + (sprite.getWidth() * Game.scale) > Display.getWidth()) + '\n'
+//                + "Bounds y" + (position.y * Game.scale) + (sprite.getHeight() * Game.scale) + ":" + ((position.y * Game.scale) + (sprite.getHeight() * Game.scale) > Display.getHeight()), 1, 64);
 
     }
 }
