@@ -13,6 +13,7 @@ public class Timer {
     private long lastTick = 0, lastFrame=0;
     private int delta = 0, frames = 0, fps = 0;
     public Timer(){
+        System.out.println(Sys.getTimerResolution());
         lastTick = Sys.getTime();
     }
     

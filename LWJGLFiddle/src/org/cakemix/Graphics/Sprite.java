@@ -19,8 +19,8 @@ public class Sprite {
     protected int frameIndex;
 
     public Sprite(String location) {
-       
-        BufferedImage texture = TextureLoader.loadImage(this.getClass().getResourceAsStream('/' +location));
+
+        BufferedImage texture = TextureLoader.loadImage(this.getClass().getResourceAsStream('/' + location));
         //BufferedImage texture = TextureLoader.loadImage(System.getProperty("user.dir") + '/' +location);
         width = texture.getWidth();
         height = texture.getHeight();
@@ -36,8 +36,13 @@ public class Sprite {
         // in sub class
     }
 
-    public int getWidth(){ return width; }
-    public int getHeight(){ return height; }
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 
     /*
      * Render the Sprite

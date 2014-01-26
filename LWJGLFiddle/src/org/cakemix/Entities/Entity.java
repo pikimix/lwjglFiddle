@@ -1,8 +1,6 @@
 package org.cakemix.Entities;
 
 import org.cakemix.Graphics.AnimatedSprite;
-import org.cakemix.Graphics.Sprite;
-import org.cakemix.Timer;
 import org.lwjgl.util.vector.Vector2f;
 
 /**
@@ -118,6 +116,13 @@ public class Entity {
     public int clampToGrid(float value, int size) {
         //clamp to given grid
         return (int) (value / size) * size;
+    }
+    
+    public int getWidth(){
+        return sprite.getWidth();
+    }
+    public int getHeight(){
+        return sprite.getHeight();
     }
 
     /*

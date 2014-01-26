@@ -56,24 +56,23 @@ public class TileSet {
         return (int) (tileHeight * Game.scale);
     }
 
-    public float[] getTile() {
-        float[] tile = {0f, 0f, 1f, 1f};
-
-        int x = 0, y = 9;
-
-        // currently set for grass
+    public float[] getTile(int f) {
+        // default to full texture
+        float[] frame = {0f, 0f, 1f, 1f};
+        int[] currentFrame = {0, 0};
+        currentFrame[1] = (f / 30);
+        currentFrame[0] = (f % 30);
         // get the x value
-        tile[0] = x * (tileWidth / (float) width);
+        frame[0] = currentFrame[0] * (tileWidth / (float) width);
         // Get the y value
-        tile[1] = y * (tileHeight / (float) height);
+        frame[1] = currentFrame[1] * (tileHeight / (float) height);
         // get the x + u value
-        tile[2] = (x * (tileWidth / (float) width))
+        frame[2] = (currentFrame[0] * (tileWidth / (float) width))
                 + (tileWidth / (float) width);
         // get the y + v value
-        tile[3] = (y * (tileHeight / (float) height))
+        frame[3] = (currentFrame[1] * (tileHeight / (float) height))
                 + (tileHeight / (float) height);
-
-        return tile;
+        return frame;
     }
 
     public float[] getRandom() {
@@ -98,9 +97,9 @@ public class TileSet {
         return tile;
     }
 
-    public void draw(float x, float y) {
+    public void draw(float x, float y, int t) {
         // get the current tile
-        float[] tile = getTile();
+        float[] tile = getTile(t);
 
         // Store the Curent model Matrix
         // ie. All the quads I've drawn
@@ -127,17 +126,17 @@ public class TileSet {
             GL11.glVertex2i(0, 0);
             // bottom left
             GL11.glTexCoord2d(tile[0], tile[3]);
-            GL11.glVertex2i(0, (int) (tileHeight * Game.scale));
+            GL11.glVertex2i(0, getTileHeight());
             // bottom right
             GL11.glTexCoord2d(tile[2], tile[3]);
-            GL11.glVertex2i((int) (tileWidth * Game.scale), (int) (tileHeight * Game.scale));
+            GL11.glVertex2i(getTileWidth(), getTileHeight());
 
             // bottom right
             GL11.glTexCoord2d(tile[2], tile[3]);
-            GL11.glVertex2i((int) (tileWidth * Game.scale), (int) (tileHeight * Game.scale));
+            GL11.glVertex2i(getTileWidth(), getTileHeight());
             // top right
             GL11.glTexCoord2d(tile[2], tile[1]);
-            GL11.glVertex2i((int) (tileWidth * Game.scale), 0);
+            GL11.glVertex2i(getTileWidth(), 0);
             // top left
             GL11.glTexCoord2d(tile[0], tile[1]);
             GL11.glVertex2i(0, 0);

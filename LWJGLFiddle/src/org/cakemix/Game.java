@@ -66,7 +66,7 @@ public class Game {
                 height = Display.getHeight();
                 initGL();
 
-                scale = width / 800f;
+                //scale = width / 800f;
             }
 
             update();

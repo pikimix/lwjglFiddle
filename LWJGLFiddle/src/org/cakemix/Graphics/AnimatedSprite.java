@@ -42,12 +42,12 @@ public class AnimatedSprite extends Sprite {
     // scaling handled in the draw function
     @Override
     public int getWidth() {
-        return frameWidth;
+        return (int)(frameWidth*Game.scale);
     }
 
     @Override
     public int getHeight() {
-        return frameHeight;
+        return (int)(frameHeight*Game.scale);
     }
 
     /*
@@ -156,17 +156,17 @@ public class AnimatedSprite extends Sprite {
             GL11.glVertex2i(0, 0);
             // bottom left
             GL11.glTexCoord2d(frame[0], frame[3]);
-            GL11.glVertex2i(0, (int) (frameHeight * Game.scale));
+            GL11.glVertex2i(0, getHeight());
             // bottom right
             GL11.glTexCoord2d(frame[2], frame[3]);
-            GL11.glVertex2i((int) (frameWidth * Game.scale), (int) (frameHeight * Game.scale));
+            GL11.glVertex2i(getWidth(), getHeight());
 
             // bottom right
             GL11.glTexCoord2d(frame[2], frame[3]);
-            GL11.glVertex2i((int) (frameWidth * Game.scale), (int) (frameHeight * Game.scale));
+            GL11.glVertex2i(getWidth(), getHeight());
             // top right
             GL11.glTexCoord2d(frame[2], frame[1]);
-            GL11.glVertex2i((int) (frameWidth * Game.scale), 0);
+            GL11.glVertex2i(getWidth(), 0);
             // top left
             GL11.glTexCoord2d(frame[0], frame[1]);
             GL11.glVertex2i(0, 0);
