@@ -1,5 +1,6 @@
 package org.cakemix;
 
+import org.cakemix.Graphics.Camera;
 import org.cakemix.Graphics.SpriteFont;
 import org.cakemix.world.Map;
 import org.lwjgl.LWJGLException;
@@ -24,6 +25,8 @@ public class Game {
     protected Map map;
     public static float scale = 1f;
 
+    public static Camera camera = new Camera(0,0);
+    
     /**
      * Start the game Create the window, call init() then run the game loop until either the window dies or isRunning is changed to false
      */
@@ -65,6 +68,7 @@ public class Game {
                 width = Display.getWidth();
                 height = Display.getHeight();
                 initGL();
+        GL11.glViewport(-100, 0, Display.getWidth(), Display.getHeight());
 
                 //scale = width / 800f;
             }
@@ -144,7 +148,8 @@ public class Game {
         
         //update the display
         Display.update();
-        GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
+        // move the camera
+        GL11.glTranslatef(camera.getX(), camera.getY(), 0);
         // Limit rendering to 60 fps
         Display.sync(60);
     }

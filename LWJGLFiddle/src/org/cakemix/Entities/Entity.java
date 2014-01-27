@@ -42,9 +42,13 @@ public class Entity {
         // update entitys position
         position.x += velocity.x;
         position.y += velocity.y;
-
-
-
+    }
+    
+    public float getPosX(){
+        return position.x;
+    }
+    public float getPosY(){
+        return position.y;
     }
 
     /*

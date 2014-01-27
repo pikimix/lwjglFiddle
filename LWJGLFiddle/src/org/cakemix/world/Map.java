@@ -4,12 +4,9 @@
  */
 package org.cakemix.world;
 
-import java.awt.Font;
-import java.util.Random;
 import org.cakemix.Entities.Player;
 import org.cakemix.Game;
 import org.cakemix.Graphics.TileSet;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
@@ -49,6 +46,15 @@ public class Map {
     public void update() {
 
         localPlayer.update();
+        int shiftX = 0 ,shiftY = 0;
+        if (localPlayer.getPosX() < Game.camera.getX() + Display.getWidth()/4){
+            shiftX = (int)(Game.camera.getX() - localPlayer.getPosX());
+        }
+        if (localPlayer.getPosX() < Game.camera.getX() + 3*(Display.getWidth()/4))
+        {
+            shiftX = (int)(3*(Display.getWidth()/4) - localPlayer.getPosX());
+        }
+        Game.camera.shift(-shiftX, 0);
         
     }
 
