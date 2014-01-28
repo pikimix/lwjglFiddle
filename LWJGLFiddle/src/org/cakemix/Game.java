@@ -1,12 +1,15 @@
 package org.cakemix;
 
+import org.cakemix.Chat.ChatInput;
 import org.cakemix.Graphics.Camera;
 import org.cakemix.Graphics.SpriteFont;
 import org.cakemix.world.Map;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector2f;
 
 /**
  *
@@ -24,11 +27,12 @@ public class Game {
     // world map
     protected Map map;
     public static float scale = 1f;
+    public static Camera camera = new Camera(0, 0);
+    public ChatInput chat;
 
-    public static Camera camera = new Camera(0,0);
-    
     /**
-     * Start the game Create the window, call init() then run the game loop until either the window dies or isRunning is changed to false
+     * Start the game Create the window, call init() then run the game loop
+     * until either the window dies or isRunning is changed to false
      */
     public void start() {
         // catch any errors
@@ -63,12 +67,14 @@ public class Game {
 
         font = new SpriteFont("img/font.png");
 
+        chat = new ChatInput();
+        
         while (!Display.isCloseRequested() && isRunning) {
             if (Display.wasResized()) {
                 width = Display.getWidth();
                 height = Display.getHeight();
                 initGL();
-        GL11.glViewport(-100, 0, Display.getWidth(), Display.getHeight());
+                GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
 
                 //scale = width / 800f;
             }
@@ -114,14 +120,21 @@ public class Game {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         // change background colour
-        GL11.glClearColor(0, 0, 0, 1);
+        GL11.glClearColor(1, 1, 1, 1);
 
         // not sure bout these, but they make it work
         // Look into this one later...
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
 
-        GL11.glOrtho(0, width, height, 0, -1, 1);
+        // seams to work best as is, commented values dont resize the screen
+        GL11.glOrtho(
+                0,//camera.getX(),
+                Display.getWidth(),//camera.getX()+Display.getDisplayMode().getWidth(),
+                Display.getHeight(),//camera.getY()+Display.getDisplayMode().getHeight(),
+                0,//camera.getY(), 
+                -1,
+                1);
     }
 
     /**
@@ -130,8 +143,8 @@ public class Game {
     public void update() {
         // update game timer
         timer.update();
-
         map.update();
+        chat.update();
     }
 
     /**
@@ -139,17 +152,19 @@ public class Game {
      */
     public void render() {
         // clear the screen ready for next frame
-        //GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
+
+        // move the camera
+        GL11.glTranslatef(-camera.getX(), -camera.getY(), 0);
 
         map.draw();
-        
-        font.drawString(timer.getFps(), 0, 0);
-        
+
+        chat.draw(0, 0);
         //update the display
         Display.update();
-        // move the camera
-        GL11.glTranslatef(camera.getX(), camera.getY(), 0);
+
         // Limit rendering to 60 fps
         Display.sync(60);
     }

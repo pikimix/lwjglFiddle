@@ -44,12 +44,13 @@ public class Entity {
         position.y += velocity.y;
     }
     
-    public float getPosX(){
-        return position.x;
+    public Vector2f getPosition(){
+        return position;
     }
-    public float getPosY(){
-        return position.y;
+    public Vector2f getVelocity(){
+        return velocity;
     }
+    
 
     /*
      * Increment velocity by ammounts stated
@@ -130,7 +131,6 @@ public class Entity {
     }
 
     /*
-     *
      * Render sprite at {x, y}
      */
     public void draw() {

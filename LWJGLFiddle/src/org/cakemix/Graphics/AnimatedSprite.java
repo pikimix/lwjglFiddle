@@ -178,4 +178,59 @@ public class AnimatedSprite extends Sprite {
         // but things break without it
         GL11.glPopMatrix();
     }
+    
+    /*
+     * draw sprite at co-ords given
+     */
+    public void draw(int x, int y, float[] color) {
+        // get the current frame
+        float[] frame = getFrame();
+
+        // Store the Curent model Matrix
+        // ie. All the quads I've drawn
+        GL11.glPushMatrix();
+
+        //enable textures (just incase)
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+        // Bind to the texture
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+
+        // Move to correct location
+        GL11.glTranslatef(x * Game.scale, y * Game.scale, 0);
+        // set color (tint and alpha)
+        // need to get a variable control on the alpha
+        // oooo, swanky transparency effects xD
+        GL11.glColor4f(color[0], color[1], color[2], color[3]);
+
+        // Draw textured Quad to match the sprite
+        GL11.glBegin(GL11.GL_TRIANGLES);
+        {
+            // top left
+            GL11.glTexCoord2d(frame[0], frame[1]);
+            GL11.glVertex2i(0, 0);
+            // bottom left
+            GL11.glTexCoord2d(frame[0], frame[3]);
+            GL11.glVertex2i(0, getHeight());
+            // bottom right
+            GL11.glTexCoord2d(frame[2], frame[3]);
+            GL11.glVertex2i(getWidth(), getHeight());
+
+            // bottom right
+            GL11.glTexCoord2d(frame[2], frame[3]);
+            GL11.glVertex2i(getWidth(), getHeight());
+            // top right
+            GL11.glTexCoord2d(frame[2], frame[1]);
+            GL11.glVertex2i(getWidth(), 0);
+            // top left
+            GL11.glTexCoord2d(frame[0], frame[1]);
+            GL11.glVertex2i(0, 0);
+        }
+        // done doin shit and stuff
+        GL11.glEnd();
+
+        // not sure what this does
+        // but things break without it
+        GL11.glPopMatrix();
+    }
 }

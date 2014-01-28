@@ -143,14 +143,15 @@ public class SpriteFont extends Sprite {
     }
 
     public void drawString(String string, int x, int y, float s) {
-        int linePos = x;
+        int origin = x;
+        int linePos = 0;
         for (int i = 0; i < string.length(); i++) {
 
             if (string.charAt(i) == '\n') {
                 y = (int) (y + frameHeight * s);
-                linePos = x - 1;
+                linePos = 0;
             } else {
-                drawCharacter(string.charAt(i), x + ((int) (frameWidth * s) * linePos), y, s);
+                drawCharacter(string.charAt(i), origin + ((int) (frameWidth * s) * linePos), y, s);
                 linePos++;
             }
         }

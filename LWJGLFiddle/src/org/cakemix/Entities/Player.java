@@ -45,7 +45,6 @@ public class Player extends Entity {
     @Override
     public void update() {
         handleInput();
-        screenCheck();
 
         super.update();
         if (vectorDistanceSquare(mouseDestination, position) < 16) {
@@ -78,15 +77,15 @@ public class Player extends Entity {
     public void handleMouse() {
 
         if (Mouse.isButtonDown(0)) {
-            mouseDestination.x = Mouse.getX() / Game.scale;
+            mouseDestination.x = Mouse.getX() + Game.camera.getX();
             // need to do some jiggery pokery withthe y mouse co ord
             // becuase the co-ords are the reverse of each other
-            mouseDestination.y = (Display.getHeight() / Game.scale) - (Mouse.getY() / Game.scale);
+            mouseDestination.y = (Game.camera.getY() + Display.getHeight()) - Mouse.getY();
             if (moveByGrid) {
                 clampx = clampToGrid(mouseDestination.x, getWidth());
                 clampy = getHeight();
-                mouseDestination.x = clampToGrid(mouseDestination.x, (int)(getWidth()/Game.scale));
-                mouseDestination.y = clampToGrid(mouseDestination.y, (int)(getHeight()/Game.scale));
+                mouseDestination.x = clampToGrid(mouseDestination.x, (int) (getWidth() / Game.scale));
+                mouseDestination.y = clampToGrid(mouseDestination.y, (int) (getHeight() / Game.scale));
             }
         }
 
@@ -102,7 +101,7 @@ public class Player extends Entity {
     }
 
     public void handleKeyboardDirect() {
-        // Get keyboard input
+        // Get keyboard input        
         while (Keyboard.next()) {
             // Y movement (negative = up, posative = down)
             if (Keyboard.getEventKey() == Keyboard.KEY_W) {
@@ -171,6 +170,8 @@ public class Player extends Entity {
 
         // Finally, update the velocity
         incrementVelocity(delta.x, delta.y);
+        mouseDestination.x = position.x;
+        mouseDestination.y = position.y;
     }
 
     public void handleKeyboardGrid() {
@@ -221,33 +222,19 @@ public class Player extends Entity {
             if (move[x]) {
                 switch (x) {
                     case 0: //up
-                        mouseDestination.y -= getHeight()/Game.scale;
+                        mouseDestination.y -= getHeight() / Game.scale;
                         break;
                     case 1: //down
-                        mouseDestination.y += getHeight()/Game.scale;
+                        mouseDestination.y += getHeight() / Game.scale;
                         break;
                     case 2: //left
-                        mouseDestination.x -= getWidth()/Game.scale;
+                        mouseDestination.x -= getWidth() / Game.scale;
                         break;
                     case 3: //right
-                        mouseDestination.x += getWidth()/Game.scale;
+                        mouseDestination.x += getWidth() / Game.scale;
                         break;
                 }
             }
-        }
-
-        if (mouseDestination.x < 0) {
-            mouseDestination.x = 0;
-        }
-        if (mouseDestination.x > Display.getWidth()) {
-            mouseDestination.x = Display.getWidth() - (getWidth());
-        }
-        if (mouseDestination.y < 0) {
-            mouseDestination.y = 0;
-        }
-        if (mouseDestination.y > Display.getHeight()) {
-
-            mouseDestination.y = Display.getHeight() - (getHeight());
         }
     }
 
@@ -265,32 +252,37 @@ public class Player extends Entity {
         return (delta.x * delta.x) + (delta.y * delta.y);
     }
 
-    /*
-     * Keep the player on the screen
-     */
-    protected void screenCheck() {
-        if (position.x < 0) {
-            position.x = 0;
-        } else {
-            if ((position.x * Game.scale) + (getWidth()) > Display.getWidth()) {
-                position.x = (int) (((Display.getWidth() / Game.scale) - (getWidth()/Game.scale)));
-            }
-        }
-        if (position.y < 0) {
-            position.y = 0;
-        } else {
-            if ((position.y * Game.scale) + (getHeight()) > Display.getHeight()) {
-                position.y = (int) (((Display.getHeight() / Game.scale) - (getHeight()/Game.scale)));
-            }
-        }
+    public void setPosition(float x, float y) {
+        position.x = x;
+        position.y = y;
+    }
+
+    public void setX(int x) {
+        position.x = x;
+    }
+
+    public void setY(int y) {
+        position.y = y;
+    }
+
+    public void setDestination(float x, float y) {
+        mouseDestination.x = x;
+        mouseDestination.y = y;
+    }
+
+    public Vector2f getDestination() {
+        return mouseDestination;
     }
 
     @Override
     public void draw() {
         super.draw();
 
-        drawMousePoint();
-        //drawDebug();
+        if (mouseDestination.x != position.x ||
+                mouseDestination.y != position.y) {
+            drawMousePoint();
+        }
+//        drawDebug();
     }
 
     public void drawDebug() {
@@ -305,7 +297,8 @@ public class Player extends Entity {
                 + "dmx " + delta.x + " :dmy " + delta.y + '\n'
                 + "distance " + (int) distance + '\n'
                 + "Bounds x" + (position.x * Game.scale) + (getWidth()) + ":" + ((position.x * Game.scale) + (getWidth()) > Display.getWidth()) + '\n'
-                + "Bounds y" + (position.y * Game.scale) + (getHeight()) + ":" + ((position.y * Game.scale) + (getHeight()) > Display.getHeight()), 1, 128);
+                + "Bounds y" + (position.y * Game.scale) + (getHeight()) + ":" + ((position.y * Game.scale) + (getHeight()) > Display.getHeight()),
+                0 + Game.camera.getX(), 128);
 
     }
 
@@ -331,5 +324,7 @@ public class Player extends Entity {
 
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
+        float[] color = new float[]{1f, 0, 0, 1f};
+        sprite.draw((int) mouseDestination.x, (int) mouseDestination.y, color);
     }
 }

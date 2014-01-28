@@ -4,12 +4,16 @@
  */
 package org.cakemix.world;
 
+import java.util.Random;
 import org.cakemix.Entities.Player;
 import org.cakemix.Game;
 import org.cakemix.Graphics.TileSet;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
+import org.lwjgl.util.vector.Vector;
+import org.lwjgl.util.vector.Vector2f;
 
 /**
  *
@@ -20,42 +24,79 @@ public class Map {
     protected Player localPlayer;
     // test tile set
     protected TileSet tiles;
-    protected int[][] background = new int[30][16];
+    protected int[][] background;
+    int width = 30, height = 30;
     int tx = 0, ty = 0;
 
     public Map() {
         localPlayer = new Player("img/debug2x4.png", 2, 4);
         //setup test tileset
+        background = new int[width][height];
         tiles = new TileSet("img/tileset.png");
         randomBackground();
+        Game.camera.setLimits(width * tiles.getTileWidth(), height * tiles.getTileHeight());
+    }
+    /*
+     * Keep the player on the screen
+     */
+
+    protected void boundsCheck() {
+        if (localPlayer.getPosition().x < 0) {
+            localPlayer.setX(0);
+        } else {
+            if (localPlayer.getPosition().x > (width - 1) * tiles.getTileWidth()) {
+                localPlayer.setX((width - 1) * tiles.getTileWidth());
+            }
+        }
+        if (localPlayer.getPosition().y < 0) {
+            localPlayer.setY(0);
+        } else {
+            if (localPlayer.getPosition().y > (height - 1) * tiles.getTileHeight()) {
+                localPlayer.setY((height - 1) * tiles.getTileHeight());
+            }
+        }
+
+        Vector2f d = new Vector2f(localPlayer.getDestination().x, localPlayer.getDestination().y);
+        if (d.x < 0) {
+            d.x = 0;
+        } else {
+            if (d.x > (width - 1) * tiles.getTileWidth()) {
+                d.x = (width - 1) * tiles.getTileWidth();
+            }
+        }
+        if (d.y < 0) {
+            d.y = 0;
+        } else {
+            if (d.y > (height - 1) * tiles.getTileHeight()) {
+                d.y = (height - 1) * tiles.getTileHeight();
+            }
+        }
+
+        localPlayer.setDestination(d.x, d.y);
+
     }
 
     private void randomBackground() {
-        int t = 0;
-            for (int y = 0; y < 16; y++) {
-        for (int x = 0; x < 30; x++) {
-                background[x][y] = t;
-                t++;
-                System.out.print(background[x][y] + ":");
+        Random r = new Random();
+        //int t = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                background[x][y] = r.nextInt(16 * 30); //t;
+                //t++;
             }
-            
-        System.out.println();
         }
     }
 
     public void update() {
 
         localPlayer.update();
-        int shiftX = 0 ,shiftY = 0;
-        if (localPlayer.getPosX() < Game.camera.getX() + Display.getWidth()/4){
-            shiftX = (int)(Game.camera.getX() - localPlayer.getPosX());
+        if (Mouse.isButtonDown(1)) {
+            Game.camera.ScrollCamera(
+                    new Vector2f
+                        (Display.getWidth() - Mouse.getX(), Mouse.getY()));
         }
-        if (localPlayer.getPosX() < Game.camera.getX() + 3*(Display.getWidth()/4))
-        {
-            shiftX = (int)(3*(Display.getWidth()/4) - localPlayer.getPosX());
-        }
-        Game.camera.shift(-shiftX, 0);
-        
+        //Game.camera.ScrollCamera(new Vector2f(localPlayer.getPosition().x, localPlayer.getPosition().y));
+        boundsCheck();
     }
 
     public void draw() {
@@ -65,28 +106,30 @@ public class Map {
     }
 
     protected void fillTiles() {
-            for (int y = 0; y  < 16 /* tiles.getTileHeight() < Display.getHeight()*/; y++) {
-        for (int x = 0; x < 30 /* tiles.getTileWidth() < Display.getWidth()*/; x++) {
-                tiles.draw(x, y,background[x][y]);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                tiles.draw(x, y, background[x][y]);
             }
         }
     }
 
     private void drawGrid() {
         int x = 0, y = 0;
-        while (x < Display.getWidth()) {
-            drawLine(new Point(x, 0), new Point(x, Display.getHeight()));
-            x += localPlayer.getWidth();
+        while (x < width + 1) {
+            drawLine(new Point(x * tiles.getTileWidth(), 0),
+                    new Point(x * tiles.getTileWidth(), height * tiles.getTileHeight()));
+            x++;
         }
-        while (y < Display.getHeight()) {
-            drawLine(new Point(0, y), new Point(Display.getWidth(), y));
-            y += localPlayer.getHeight();
+        while (y < height + 1) {
+            drawLine(new Point(0, y * tiles.getTileHeight()),
+                    new Point(width * tiles.getTileWidth(), y * tiles.getTileHeight()));
+            y++;
         }
     }
 
     private void drawLine(Point point, Point point2) {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glColor4f(0f, 0f, 0f, 0.5f);
+        GL11.glColor4f(0f, 0f, 0f, 1f);
         GL11.glBegin(GL11.GL_LINE_STRIP);
 
         GL11.glVertex2d(point.getX(), point.getY());
